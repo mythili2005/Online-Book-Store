@@ -8,9 +8,9 @@ const Header = () => {
   const { cart } = useCart();
 
   return (
-    <header className="bg-blue-600 text-white p-4 flex justify-between">
+    <header className="bg-blue-800 text-white p-4 flex justify-between">
       <h1 className="text-xl font-bold">
-        <Link to="/">Book Store</Link>
+        <Link to="/">BOOKSMART</Link>
       </h1>
       <nav className="flex gap-4 items-center">
         <Link to="/books">Books</Link>

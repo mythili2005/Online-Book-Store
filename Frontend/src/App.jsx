@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound.jsx";
 
 function App() {
   return (
+    
     <Router>
       <div className="flex flex-col min-h-screen">
         <Header />
@@ -27,6 +28,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
+
           </Routes>
         </main>
         <Footer />
