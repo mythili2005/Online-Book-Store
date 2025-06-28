@@ -1,4 +1,3 @@
-const bodyParser = require('body-parser');
 var mongodb = require('mongoose');
 
 var bookSchema = mongodb.Schema({
