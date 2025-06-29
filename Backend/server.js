@@ -1,13 +1,13 @@
+var denv = require('dotenv');
+denv.config();
 var express = require('express');
 var mongodb = require('mongoose');
-var denv = require('dotenv');
 var cors =  require('cors');
 var authRoutes = require('./routes/auth.js');
 var bookRoutes = require('./routes/book.js');
 var app = express();
 app.use(express.json());
 app.use(cors());
-denv.config();
 const PORT = 3001;
 
 app.use('/api', authRoutes);
