@@ -3,38 +3,48 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  const navigate = useNavigate();
+  const [type, setType] = useState("user");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
     try {
       const res = await axios.post("http://localhost:3001/api/login", {
         email,
         password,
-        type: isAdmin ? "admin" : "user",
+        type,
       });
+
       console.log(res.data);
       alert("Login successful!");
-      navigate("/");
+
+      // Optionally store token if backend sends it:
+      // localStorage.setItem("token", res.data.token);
+
+      navigate("/"); // Or your dashboard/home
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Login failed");
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("Login failed. Please try again.");
+      }
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-full bg-white">
+    <div className="flex items-center justify-center min-h-screen bg-white">
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-blue-100">
-        <div className="text-center mb-4">
-          <h1 className="text-3xl font-bold text-blue-800">BookSmart</h1>
-          <p className="text-gray-600 mt-1">"Unlock knowledge with every page you turn."</p>
-        </div>
+        <h1 className="text-3xl font-bold text-center text-blue-800 mb-2">BookSmart</h1>
+        <p className="text-center text-gray-600 mb-6">Welcome back! Log in to continue.</p>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <input
               type="email"
@@ -57,31 +67,34 @@ const Login = () => {
             />
           </div>
 
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
+            <label className="text-sm text-gray-600">Admin?</label>
             <input
               type="checkbox"
-              id="adminCheck"
-              checked={isAdmin}
-              onChange={() => setIsAdmin(!isAdmin)}
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              checked={type === "admin"}
+              onChange={() => setType(type === "admin" ? "user" : "admin")}
             />
-            <label htmlFor="adminCheck" className="ml-2 block text-sm text-gray-700">
-              Login as Admin
-            </label>
           </div>
+
+          {error && (
+            <p className="text-red-600 text-sm">{error}</p>
+          )}
 
           <button
             type="submit"
             className="w-full bg-blue-800 hover:bg-blue-900 text-white py-3 rounded-lg font-medium transition-colors shadow-md hover:shadow-lg"
           >
-            Login
+            Log In
           </button>
         </form>
 
-        <p className="mt-4 text-sm text-center text-gray-600">
+        <p className="mt-6 text-center text-sm text-gray-600">
           Don&apos;t have an account?{" "}
-          <Link to="/signup" className="text-blue-500 hover:text-blue-800 font-medium underline underline-offset-2 transition-colors">
-            Signup here
+          <Link
+            to="/signup"
+            className="text-blue-600 hover:text-blue-800 font-medium underline underline-offset-2 transition-colors"
+          >
+            Sign up
           </Link>
         </p>
       </div>
