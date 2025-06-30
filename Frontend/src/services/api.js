@@ -14,10 +14,10 @@ export const fetchBookById = async (id) => {
   }
 };
 
-export const fetchAllBooks = async () => {
+export const fetchAllBooks = async (filters) => {
   try {
-    const res = await api.get("/books");
-    return res.data; // Array of books
+    const res = await api.get("/getBooks", { params: filters });
+    return res.data;
   } catch (err) {
     console.error("Error fetching books:", err);
     return [];

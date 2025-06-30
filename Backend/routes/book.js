@@ -38,6 +38,20 @@ router.get('/getBooks', async (req, res) => {
   }
 });
 
+// ✅ Get single book by ID
+router.get('/books/:id', async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (!book) {
+      return res.status(404).json({ message: 'Book not found' });
+    }
+    res.json(book);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
 // route
 router.put('/update-book/:id', verifyAdmin, async (req, res) => {
   try {

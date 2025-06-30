@@ -33,6 +33,7 @@ router.get('/google', (req, res) => {
 
 router.get('/google/callback', async (req, res) => {
   const { code } = req.query;
+  console.log(code);
 
   try {
     const { tokens } = await oauth2Client.getToken(code);
@@ -64,7 +65,7 @@ router.get('/google/callback', async (req, res) => {
 
     res.redirect(`http://localhost:5173?token=${token}`);
   } catch (err) {
-    console.error(err);
+    console.error("OAuth call error",err);
     res.status(500).send("Google Auth Failed");
   }
 });

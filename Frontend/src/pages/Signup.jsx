@@ -122,7 +122,7 @@ const Signup = () => {
         </div>
 
         {/* Google Sign Up */}
-        <a href=" http://localhost:3001/api/google/callback">
+        <a href=" http://localhost:3001/api/google">
           <button
             onClick={() => console.log("Google Signup")}
             className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 py-3 rounded-lg font-medium border border-blue-200 hover:border-gray-300 transition-colors shadow-sm hover:shadow-md"
