@@ -39,10 +39,10 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white">
+    <div className="flex items-center justify-center min-h-full bg-white">
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-blue-100">
         <h1 className="text-3xl font-bold text-center text-blue-800 mb-2">BookSmart</h1>
-        <p className="text-center text-gray-600 mb-6">Welcome back! Log in to continue.</p>
+        <p className="text-center text-gray-600 mb-6">Unlock knowledge with every page you turn</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -82,7 +82,7 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-800 hover:bg-blue-900 text-white py-3 rounded-lg font-medium transition-colors shadow-md hover:shadow-lg"
+            className="w-full bg-blue-800 text-white py-3 rounded-lg font-medium transition-colors shadow-md hover:shadow-lg"
           >
             Log In
           </button>

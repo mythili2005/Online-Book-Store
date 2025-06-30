@@ -1,6 +1,5 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
-const axios = require("axios");
 const jwt = require("jsonwebtoken");
 const { google } = require('googleapis');
 const User = require("../models/User.js");
@@ -22,7 +21,6 @@ const oauth2Client = new google.auth.OAuth2(
   REDIRECT_URI
 );
 
-console.log("Google Client ID:", REDIRECT_URI);
 
 router.get('/google', (req, res) => {
   const url = oauth2Client.generateAuthUrl({

@@ -1,9 +1,9 @@
 const express = require("express");
 var Book = require('../models/Book');
-
+const { verifyAdmin } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.post('/books',async(req,res)=>{
+router.post('/books', verifyAdmin, async(req,res)=>{
     try{
         var newBook = new Book(req.body);
         newBook.save()
@@ -17,35 +17,38 @@ router.post('/books',async(req,res)=>{
     }
 })
 
-router.get('/getbooks',async(req,res)=>{
-    try{
-    var allBookRecords = await Book.find()
-        res.json(allBookRecords);
-        console.log("All data are fetched")
-    }
-    catch(error){
-        console.log(error);
-    }
+router.get('/getBooks', async (req, res) => {
+  const { category, author, minPrice, maxPrice, search } = req.query;
+  let filter = {};
+
+  if (category) filter.category = category;
+  if (author) filter.author = new RegExp(author, 'i');
+  if (search) filter.title = new RegExp(search, 'i');
+  if (minPrice || maxPrice) {
+    filter.price = {};
+    if (minPrice) filter.price.$gte = Number(minPrice);
+    if (maxPrice) filter.price.$lte = Number(maxPrice);
+  }
+
+  try {
+    const books = await Book.find(filter);
+    res.json(books);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 // route
-router.put('/update-books/:id',async (req, res) => {
+router.put('/update-book/:id', verifyAdmin, async (req, res) => {
   try {
-    const { title, author } = req.body;
-
-    const book = await Book.findByIdAndUpdate(
+    const updated = await Book.findByIdAndUpdate(
       req.params.id,
-      { title, author },
+      { $set: req.body },
       { new: true }
     );
-
-    if (!book) {
-      return res.status(404).json({ message: 'Book not found' });
-    }
-
-    res.status(200).json(book);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json(err);
   }
 });
 

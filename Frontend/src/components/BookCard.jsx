@@ -1,32 +1,31 @@
+// BookCard.js
 import React from "react";
 import { Link } from "react-router-dom";
-import { useCart } from "../context/CartContext";
 
-const BookCard = ({ book }) => {
-  const { addToCart } = useCart();
-
-  return (
-    <div className="border rounded p-4 shadow flex flex-col items-center">
-      <Link to={`/books/${book._id}`}>
+const BookCard = ({ book }) => (
+  <Link to={`/books/${book._id}`} className="group">
+    <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 h-full flex flex-col">
+      <div className="relative pt-[150%] overflow-hidden">
         <img
           src={book.coverImage}
           alt={book.title}
-          className="w-32 h-40 mb-4 object-cover"
+          className="absolute top-0 left-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
-      </Link>
-      <Link to={`/books/${book._id}`} className="font-bold mb-2 hover:underline">
-        {book.title}
-      </Link>
-      <p className="text-gray-700 mb-1">by {book.author}</p>
-      <p className="font-semibold mb-3">₹{book.price}</p>
-      <button
-        onClick={() => addToCart(book._id)}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        Add to Cart
-      </button>
+      </div>
+      <div className="p-4 flex-1 flex flex-col">
+        <h3 className="text-lg font-semibold text-gray-800 mb-1 line-clamp-2">
+          {book.title}
+        </h3>
+        <p className="text-gray-600 text-sm mb-2">by {book.author}</p>
+        <div className="mt-auto flex justify-between items-center">
+          <span className="text-blue-600 font-bold">${book.price}</span>
+          <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+            {book.category}
+          </span>
+        </div>
+      </div>
     </div>
-  );
-};
+  </Link>
+);
 
 export default BookCard;

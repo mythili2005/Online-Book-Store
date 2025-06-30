@@ -1,14 +1,15 @@
 var mongodb = require('mongoose');
 
 var bookSchema = mongodb.Schema({
-  id: Number,
-  title: String,
+  title: { type: String, required: true },
   author: String,
-  genre: String,
-  publishedYear: Number,
+  description: String,
   price: Number,
-  coverImage: String 
-});
+  category: String,
+  coverImage: String,
+  downloadLink: String,
+  stock: Number
+}, { timestamps: true });
 
 var book_schema = mongodb.model('book',bookSchema);
 
