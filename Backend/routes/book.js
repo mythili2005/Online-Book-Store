@@ -17,7 +17,7 @@ router.post('/books', verifyAdmin, async(req,res)=>{
     }
 })
 
-router.get('/getBooks', async (req, res) => {
+router.get('/books', async (req, res) => {
   const { category, author, minPrice, maxPrice, search } = req.query;
   let filter = {};
 
@@ -53,30 +53,45 @@ router.get('/books/:id', async (req, res) => {
 
 
 // route
-router.put('/update-book/:id', verifyAdmin, async (req, res) => {
+router.put('/books/:id', verifyAdmin, async (req, res) => {
   try {
-    const updated = await Book.findByIdAndUpdate(
+    const { title, author, price, category, description, coverImage, stock } = req.body;
+    
+    const updatedBook = await Book.findByIdAndUpdate(
       req.params.id,
-      { $set: req.body },
-      { new: true }
+      { 
+        title,
+        author,
+        price,
+        category,
+        description,
+        coverImage,
+        stock
+      },
+      { new: true, runValidators: true }
     );
-    res.json(updated);
+
+    if (!updatedBook) {
+      return res.status(404).json({ message: 'Book not found' });
+    }
+
+    res.json({ message: "Book updated successfully", book: updatedBook });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 
-
-router.delete('/delete/:id',async(req,res)=>{
-    try {
-    const book = await Book.findOneAndDelete({id: Number(req.params.id)});
+// DELETE - Delete book (Admin only)
+router.delete('/books/:id', verifyAdmin, async (req, res) => {
+  try {
+    const book = await Book.findByIdAndDelete(req.params.id);
     if (!book) {
       return res.status(404).json({ message: 'Book not found' });
     }
-    res.status(200).json({ message: 'Book deleted successfully' });
-  } catch (error) {
-    console.log(error);
+    res.json({ message: 'Book deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
   }
-})
+});
 
 module.exports = router;

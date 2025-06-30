@@ -1,11 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 
 const Header = () => {
   const { user, logout } = useAuth();
   const { cart } = useCart();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+  logout();
+  navigate("/"); // ✅ redirect to home
+};
+
 
   return (
     <header className="bg-blue-800 text-white p-4 flex justify-between">
@@ -18,7 +25,7 @@ const Header = () => {
         {user ? (
           <>
             <span>Welcome, {user.name}</span>
-            <button onClick={logout} className="bg-white text-blue-600 px-2 py-1 rounded">
+            <button onClick={handleLogout} className="bg-white text-blue-600 px-2 py-1 rounded">
               Logout
             </button>
           </>

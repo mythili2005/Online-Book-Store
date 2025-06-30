@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+// src/pages/Login.jsx
+import React, { useState, } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,32 +14,39 @@ const Login = () => {
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    try {
-      const res = await axios.post("http://localhost:3001/api/login", {
-        email,
-        password,
-        type,
-      });
+  try {
+    const res = await axios.post("http://localhost:3001/api/login", {
+      email,
+      password,
+      type,
+    });
 
-      console.log(res.data);
-      alert("Login successful!");
+    const userData = res.data.user || res.data;
+console.log("User data:", userData);
+console.log("Token:", res.data.token);
 
-      // Optionally store token if backend sends it:
-      // localStorage.setItem("token", res.data.token);
-
-      navigate("/"); // Or your dashboard/home
-    } catch (err) {
-      console.error(err);
-      if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message);
-      } else {
-        setError("Login failed. Please try again.");
-      }
+    // ✅ Save token and user info
+    if (res.data.token) {
+      localStorage.setItem("token", res.data.token);
     }
-  };
+    localStorage.setItem("user", JSON.stringify(userData));
+    login(userData);
+
+    alert("Login successful!");
+    navigate(userData.type === "admin" ? "/admin" : "/");
+  } catch (err) {
+    console.error(err);
+    if (err.response?.data?.message) {
+      setError(err.response.data.message);
+    } else {
+      setError("Login failed. Please try again.");
+    }
+  }
+};
+
 
   return (
     <div className="flex items-center justify-center min-h-full bg-white">

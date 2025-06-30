@@ -100,6 +100,7 @@ router.post("/signup", async (req, res) => {
 // Login
 router.post("/login", async (req, res) => {
   const { email, password, type } = req.body;
+
   if (type === "admin") {
     if (
       email === process.env.ADMIN_EMAIL &&
@@ -110,24 +111,46 @@ router.post("/login", async (req, res) => {
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
-      return res.json({ token });
+      return res.json({
+        user: {
+          name: "Admin",
+          email,
+          type: "admin"
+        },
+        token
+      });
     } else {
       return res.status(400).json({ message: "Invalid admin credentials" });
     }
   } else {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid email" });
+    try {
+      const user = await User.findOne({ email });
+      if (!user) return res.status(400).json({ message: "Invalid email" });
 
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(400).json({ message: "Invalid password" });
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) return res.status(400).json({ message: "Invalid password" });
 
-    const token = jwt.sign(
-      { id: user._id, name: user.name, email: user.email, type: "user" },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
-    res.status(200).send("User loggedin s");
+      const token = jwt.sign(
+        { id: user._id, name: user.name, email: user.email, type: "user" },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+
+      return res.status(200).json({
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          type: "user"
+        },
+        token
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Server error" });
+    }
   }
 });
+
 
 module.exports = router;

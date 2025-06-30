@@ -1,14 +1,14 @@
 var mongodb = require('mongoose');
 
 var bookSchema = mongodb.Schema({
-  title: { type: String, required: true },
-  author: String,
-  description: String,
-  price: Number,
-  category: String,
-  coverImage: String,
-  downloadLink: String,
-  stock: Number
+  title: { type: String, required: true },         // Required
+  author: { type: String, required: true },        // Required
+  price: { type: Number, required: true },
+  category: { type: String, required: true },
+  description: { type: String, required: true },
+  coverImage: { type: String, required: true },
+  downloadLink: { type: String, required: true },
+  stock: { type: Number, required: true }
 }, { timestamps: true });
 
 var book_schema = mongodb.model('book',bookSchema);
