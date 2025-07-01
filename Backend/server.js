@@ -5,6 +5,8 @@ var mongodb = require('mongoose');
 var cors =  require('cors');
 var authRoutes = require('./routes/auth.js');
 var bookRoutes = require('./routes/book.js');
+var cartRoutes = require('./routes/cart.js');
+var orderRoutes = require('./routes/order.js');
 var app = express();
 app.use(express.json());
 app.use(cors());
@@ -12,6 +14,9 @@ const PORT = 3001;
 
 app.use('/api', authRoutes);
 app.use('/api',bookRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/order', orderRoutes);
+
 
 mongodb.connect(process.env.MONGO_URI).then( ()=>{
     console.log("Mongodb connected successfully");
