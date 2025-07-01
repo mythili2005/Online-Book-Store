@@ -1,31 +1,32 @@
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext } from "react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
- const [user, setUser] = useState(() => {
+  const [user, setUser] = useState(() => {
   const stored = localStorage.getItem("user");
-  return stored ? JSON.parse(stored) : null;
+  if (stored) {
+    const parsed = JSON.parse(stored);
+    return {
+      ...parsed,
+      _id: parsed._id || parsed.id, // ✅ Normalize on load too
+    };
+  }
+  return null;
 });
 
-  // ✅ Load user from localStorage on first render
-  useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      }
-    } catch (err) {
-      console.error("Error parsing user from localStorage:", err);
-      setUser(null); // fallback
-    }
-  }, []);
 
-  // ✅ Save to localStorage on login
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+const login = (userData) => {
+  const normalizedUser = {
+    ...userData,
+    _id: userData._id || userData.id, // ✅ Ensure _id is present
   };
+
+  localStorage.setItem("user", JSON.stringify(normalizedUser));
+  setUser(normalizedUser);
+};
+
+
 
   const logout = () => {
     setUser(null);
