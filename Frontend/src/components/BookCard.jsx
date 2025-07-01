@@ -18,7 +18,7 @@ const BookCard = ({ book }) => (
         </h3>
         <p className="text-gray-600 text-sm mb-2">by {book.author}</p>
         <div className="mt-auto flex justify-between items-center">
-          <span className="text-blue-600 font-bold">${book.price}</span>
+          <span className="text-blue-700 font-bold">${book.price}</span>
           <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
             {book.category}
           </span>

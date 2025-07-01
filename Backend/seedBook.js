@@ -34,7 +34,6 @@ async function seedBooks(count = 120) {
       price: faker.number.int({ min: 99, max: 999 }),
       category: faker.helpers.arrayElement(categories),
       coverImage: `https://picsum.photos/seed/book-${i}/300/400`,
-      downloadLink: faker.internet.url(),
       stock: faker.number.int({ min: 0, max: 50 }),
     });
   }

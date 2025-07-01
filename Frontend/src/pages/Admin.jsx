@@ -12,7 +12,6 @@ const Admin = () => {
     category: "",
     description: "",
     coverImage: "",
-    downloadLink: "",
     stock: 0
   });
   const [editingBook, setEditingBook] = useState(null);
@@ -47,7 +46,6 @@ const Admin = () => {
         category: "",
         description: "",
         coverImage: "",
-        downloadLink: "",
         stock: 0
       });
     } catch (err) {
@@ -140,7 +138,7 @@ const Admin = () => {
                   ? setEditingBook({ ...editingBook, price: e.target.value })
                   : setNewBook({ ...newBook, price: e.target.value })
               }
-              className="w-full p-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="appearance-none[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [appearance:textfield] w-full p-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           <div>
@@ -182,21 +180,6 @@ const Admin = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Download Link</label>
-            <input
-              type="text"
-              placeholder="https://..."
-              value={editingBook?.downloadLink || newBook.downloadLink}
-              onChange={(e) =>
-                editingBook
-                  ? setEditingBook({ ...editingBook, downloadLink: e.target.value })
-                  : setNewBook({ ...newBook, downloadLink: e.target.value })
-              }
-              className="w-full p-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Stock</label>
             <input
               type="number"
@@ -207,7 +190,7 @@ const Admin = () => {
                   ? setEditingBook({ ...editingBook, stock: e.target.value })
                   : setNewBook({ ...newBook, stock: e.target.value })
               }
-              className="w-full p-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="appearance-none[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [appearance:textfield] w-full p-3 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 

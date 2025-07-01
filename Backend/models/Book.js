@@ -7,7 +7,6 @@ var bookSchema = mongodb.Schema({
   category: { type: String, required: true },
   description: { type: String, required: true },
   coverImage: { type: String, required: true },
-  downloadLink: { type: String, required: true },
   stock: { type: Number, required: true }
 }, { timestamps: true });
 
