@@ -12,7 +12,11 @@ const CartPage = () => {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handlePayment = async () => {
-    if (!user) return alert("Please login to proceed.");
+    if (!user) {
+    alert("Please login to proceed.")
+    navigate("/login");
+    return;
+  }
     if (!address.name || !address.phone || !address.line || !address.pincode)
       return alert("Please fill in all address fields.");
 
@@ -85,9 +89,14 @@ const CartPage = () => {
 
         {cart.length === 0 ? (
           <div className="text-center py-8">
+            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-blue-100 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
             <p className="text-gray-600 mb-4">Your cart is empty</p>
             <Link
-              to="/"
+              to="/books"
               className="inline-block bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-lg font-medium"
             >
               Continue Shopping
@@ -141,25 +150,47 @@ const CartPage = () => {
                 <span className="font-bold text-blue-800">₹{total.toFixed(2)}</span>
               </div>
             </div>
-
+            {/* Clear Cart Button */}
+            <button
+              onClick={clearCart}
+              className="w-full mb-6 py-2 text-red-600 hover:text-red-800 font-medium underline transition-colors"
+            >
+              Clear Entire Cart
+            </button>
             <div className="mb-6">
               <h3 className="text-lg font-semibold mb-3">Delivery Address</h3>
               {["name", "phone", "line", "pincode"].map((field) => (
-                <input
-                  key={field}
-                  type="text"
-                  placeholder={field === "line" ? "Street Address" : `Enter ${field}`}
-                  className="w-full mb-3 px-4 py-3 border border-gray-200 rounded-lg"
-                  value={address[field]}
-                  onChange={(e) => setAddress({ ...address, [field]: e.target.value })}
-                />
-              ))}
+  <input
+    key={field}
+    type={field === "phone" || field === "pincode" ? "number" : "text"}
+    required
+    placeholder={
+      field === "line"
+        ? "Street Address"
+        : field === "pincode"
+        ? "Pincode"
+        : field === "phone"
+        ? "Phone Number"
+        : `Enter ${field}`
+    }
+    className="appearance-none[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [appearance:textfield] w-full mb-3 px-4 py-3 border border-gray-200 rounded-lg"
+    value={address[field]}
+    onChange={(e) =>
+      setAddress({
+        ...address,
+        [field]: field === "phone" || field === "pincode"
+          ? e.target.value.replace(/\D/g, "")
+          : e.target.value,
+      })
+    }
+    inputMode={field === "phone" || field === "pincode" ? "numeric" : "text"}
+  />
+))}
             </div>
 
             <button
               onClick={handlePayment}
               className="w-full bg-blue-800 hover:bg-blue-900 text-white py-3 rounded-lg font-medium"
-              disabled={!address.name || !address.phone || !address.line || !address.pincode}
             >
               Proceed to Payment (₹{total.toFixed(2)})
             </button>

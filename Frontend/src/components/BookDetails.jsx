@@ -10,7 +10,7 @@ const BookDetails = () => {
   const [quantity, setQuantity] = useState("1");
   const [showQuantityBox, setShowQuantityBox] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-
+  const [errorMessage, setErrorMessage] = useState("");
   const { cart, addToCart } = useCart();
 
   useEffect(() => {
@@ -41,12 +41,12 @@ const BookDetails = () => {
   const handleAdd = () => {
     const numericQty = parseInt(quantity,10);
     if (!numericQty || numericQty < 1) {
-      alert("Please enter a valid quantity.");
+       setErrorMessage("Please enter a valid quantity.");
       return;
     }
 
     if (numericQty > book.stock) {
-      alert(`Only ${book.stock} copies available in stock.`);
+      setErrorMessage(`Only ${book.stock} copies available in stock.`);
       return;
     }
 
@@ -54,7 +54,7 @@ const BookDetails = () => {
     const currentQty = existingItem ? existingItem.quantity : 0;
 
     if (numericQty + currentQty > book.stock) {
-      alert(
+      setErrorMessage(
         `You already have ${currentQty} in your cart. You can only add ${book.stock - currentQty} more.`
       );
       return;
@@ -62,9 +62,11 @@ const BookDetails = () => {
 
     addToCart(book, numericQty);
     setSuccessMessage(`${numericQty} ${numericQty === 1 ? 'copy' : 'copies'} added to cart!`);
+    setErrorMessage(""); 
     setShowQuantityBox(false);
     setQuantity("1");
-    setTimeout(() => setSuccessMessage(""), 3000);
+    setTimeout(() => {setSuccessMessage("");
+      setErrorMessage("");}, 3000);
   };
 
   const handleCancel = () => {
@@ -141,12 +143,16 @@ const BookDetails = () => {
                 )}
               </>
             )}
-
-            {successMessage && (
-              <div className="mt-1 text-green-800 ">
-                {successMessage}
-              </div>
-            )}
+{successMessage && (
+  <div className="mt-1 text-green-800">
+    {successMessage}
+  </div>
+)}
+{errorMessage && (
+  <div className="mt-1 text-red-600">
+    {errorMessage}
+  </div>
+)}
           </div>
         </div>
       </div>

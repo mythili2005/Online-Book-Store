@@ -58,12 +58,12 @@ router.get('/google/callback', async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id, name: user.name, email: user.email },
+      { id: user._id, name: user.name, email: user.email},
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
-    res.redirect(`http://localhost:5173?token=${token}`);
+    res.redirect(`http://localhost:5173/google-auth?token=${token}`);
   } catch (err) {
     console.error("OAuth call error",err);
     res.status(500).send("Google Auth Failed");

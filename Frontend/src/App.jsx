@@ -12,6 +12,7 @@ import Signup from "./pages/Signup.jsx";
 import Admin from "./pages/Admin.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import OrdersPage from "./pages/OrdersPage.jsx";
+import GoogleAuthHandler from "./pages/GoogleAuthHandler";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/google-auth" element={<GoogleAuthHandler />} />
 
           </Routes>
         </main>
