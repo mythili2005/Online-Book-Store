@@ -5,9 +5,9 @@ const Home = () => {
 
   // Stats about the bookstore
   const stats = [
-    { value: "1000+", label: "Books Available" },
-    { value: "24/7", label: "Instant Access" },
-    { value: "20+", label: "Categories" }
+   { value: "1000+", label: "Books Available" },
+    { value: "20+", label: "Categories" },
+    { value: "100%", label: "Secure Payments" }
   ];
 
   return (
@@ -15,7 +15,7 @@ const Home = () => {
       {/* Hero Section */}
       <div className="text-center py-16 bg-gradient-to-r from-blue-800 to-blue-600 text-white rounded-xl shadow-lg mb-12">
         <h1 className="text-5xl font-bold mb-6 animate-fade-in">
-          Welcome to My Book Store 📚
+          Welcome to Our Book Store 📚
         </h1>
         <p className="text-xl mb-8 max-w-2xl mx-auto">
           Discover your next literary adventure in our carefully curated collection.
@@ -48,13 +48,13 @@ const Home = () => {
               description: "Find exactly what you want with our powerful filters and search tools."
             },
             {
-              title: "Instant Downloads",
-              description: "Get your books immediately after purchase with no waiting."
+              title: "Simple Buying Experience",
+              description: "Add to cart, make payment, and your order is confirmed instantly.",
             },
             {
-              title: "Read Anywhere",
-              description: "Access your library on all devices, anytime, anywhere."
-            }
+              title: "Track Your Orders",
+              description: "Easily view past purchases anytime from your profile.",
+            },
           ].map((feature, index) => (
             <div key={index} className="bg-blue-50 p-6 rounded-xl border border-blue-100 hover:shadow-md transition">
               <div className="text-4xl mb-4">{feature.icon}</div>
@@ -84,19 +84,19 @@ const Home = () => {
         <h2 className="text-3xl font-bold mb-6 text-blue-800">About Our Book Store</h2>
         <div className="grid md:grid-cols-2 gap-8">
           <div>
-            <p className="mb-4 text-lg">
-              We're passionate about connecting readers with books they'll love. Our carefully curated collection spans all genres and interests, from timeless classics to the latest bestsellers.
+           <p className="mb-4 text-lg">
+              We’re here to make book buying delightful. From classic novels to trending topics — we bring them all under one roof.
             </p>
             <p className="mb-4">
-              Our advanced filtering system lets you find books by price, author, category, or popularity. Adjust the price range with an intuitive slider or search by title or author with instant results.
+              Use our advanced filters to find books by genre, author, price range, or popularity. Shopping for books has never been easier!
             </p>
           </div>
           <div>
             <p className="mb-4">
-              We believe book shopping should be simple, smart, and joyful. That's why we've created a seamless experience from discovery to download.
+              With a focus on quality and ease of use, our platform helps you discover the perfect book in just a few clicks.
             </p>
             <p>
-              Start exploring today and get your next adventure delivered to your device in seconds! Our team is constantly updating our collection to bring you the best reading experience possible.
+              No subscriptions. No distractions. Just buy the book you love and get it delivered to your doorstep.
             </p>
           </div>
         </div>
