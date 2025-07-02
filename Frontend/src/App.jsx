@@ -11,10 +11,12 @@ import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Admin from "./pages/Admin.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import OrdersPage from "./pages/OrdersPage.jsx";
+
 
 function App() {
   return (
-    
+
     <Router>
       <div className="flex flex-col min-h-screen">
         <Header />
@@ -28,6 +30,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/orders" element={<OrdersPage />} />
 
           </Routes>
         </main>
