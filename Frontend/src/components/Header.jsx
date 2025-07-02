@@ -1,5 +1,5 @@
 import React from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 
@@ -9,9 +9,9 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-  logout();
-  navigate("/"); // ✅ redirect to home
-};
+    logout();
+    navigate("/"); // ✅ redirect to home
+  };
 
 
   return (
@@ -20,6 +20,9 @@ const Header = () => {
         <Link to="/">BOOKSMART</Link>
       </h1>
       <nav className="flex gap-4 items-center">
+        {user?.type === "admin" && (
+          <Link to="/admin">Dashboard</Link>
+        )}
         <Link to="/books">Books</Link>
         <Link to="/cart">Cart ({cart.length})</Link>
         {user ? (

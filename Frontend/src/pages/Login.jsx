@@ -36,7 +36,7 @@ console.log("Token:", res.data.token);
     login(userData);
 
     alert("Login successful!");
-    navigate(userData.type === "admin" ? "/admin" : "/");
+    navigate("/");
   } catch (err) {
     console.error(err);
     if (err.response?.data?.message) {

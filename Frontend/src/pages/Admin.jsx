@@ -5,6 +5,7 @@ import api from "../services/api";
 const Admin = () => {
   const { user } = useAuth();
   const [books, setBooks] = useState([]);
+  const [successMessage, setSuccessMessage] = useState("");
   const [newBook, setNewBook] = useState({
     title: "",
     author: "",
@@ -33,10 +34,11 @@ const Admin = () => {
 
   const handleAddBook = async () => {
     try {
-      if (!newBook.title || !newBook.author || !newBook.price || !newBook.category || !newBook.description || !newBook.coverImage || !newBook.downloadLink || newBook.stock === undefined) {
+      if (!newBook.title || !newBook.author || !newBook.price || !newBook.category || !newBook.description || !newBook.coverImage || newBook.stock === undefined) {
         alert("Please fill in all the fields.");
         return;
       }
+
       await api.post("/books", newBook);
       fetchBooks();
       setNewBook({
@@ -48,6 +50,8 @@ const Admin = () => {
         coverImage: "",
         stock: 0
       });
+      setSuccessMessage("Book added successfully!");
+    setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
       console.error("Error adding book:", err);
     }
@@ -58,6 +62,8 @@ const Admin = () => {
       await api.put(`/books/${editingBook._id}`, editingBook);
       setEditingBook(null);
       fetchBooks();
+      setSuccessMessage("Book updated successfully!");
+    setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
       console.error("Error updating book:", err);
     }
@@ -235,6 +241,11 @@ const Admin = () => {
           )}
         </div>
       </div>
+      {successMessage && (
+  <div className="mb-6 p-4 rounded bg-green-100 text-green-800 border border-green-200 font-medium">
+    {successMessage}
+  </div>
+)}
 
       {/* Books List */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100">
@@ -256,9 +267,9 @@ const Admin = () => {
                 <tr key={book._id} className="hover:bg-blue-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{book.title}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{book.author}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">₹{book.price}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{book.category}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{book.stock}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{book.category}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">₹{book.price}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                     <div className="flex space-x-3">
                       <button
