@@ -21,7 +21,7 @@ const CartPage = () => {
       return alert("Please fill in all address fields.");
 
     try {
-      const order = await fetch("http://localhost:3001/api/payment/create-order", {
+      const order = await fetch("https://online-book-store-backend-qtuz.onrender.com/api/payment/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: total * 100 }),
@@ -37,7 +37,7 @@ const CartPage = () => {
         description: "Order Payment",
         order_id: order.id,
         handler: async (response) => {
-          const res = await fetch("http://localhost:3001/api/payment/verify", {
+          const res = await fetch("https://online-book-store-backend-qtuz.onrender.com/api/payment/verify", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

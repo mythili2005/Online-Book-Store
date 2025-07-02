@@ -18,7 +18,7 @@ const Login = () => {
   setError("");
 
   try {
-    const res = await axios.post("http://localhost:3001/api/login", {
+    const res = await axios.post("https://online-book-store-backend-qtuz.onrender.com/api/login", {
       email,
       password,
       type,

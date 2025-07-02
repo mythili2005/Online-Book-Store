@@ -39,7 +39,7 @@ const Signup = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:3001/api/signup", {
+      const res = await axios.post("https://online-book-store-backend-qtuz.onrender.com/api/signup", {
         name,
         email,
         password,
@@ -122,7 +122,7 @@ const Signup = () => {
         </div>
 
         {/* Google Sign Up */}
-        <a href=" http://localhost:3001/api/google">
+        <a href=" https://online-book-store-backend-qtuz.onrender.com/api/google">
           <button
             onClick={() => console.log("Google Signup")}
             className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 py-3 rounded-lg font-medium border border-blue-200 hover:border-gray-300 transition-colors shadow-sm hover:shadow-md"

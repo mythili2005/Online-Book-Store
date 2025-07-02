@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3001/api", // Update if your backend URL is different
+  baseURL: "https://online-book-store-backend-qtuz.onrender.com/api", // Update if your backend URL is different
 });
 
 api.interceptors.request.use((config) => {

@@ -15,7 +15,7 @@ export const CartProvider = ({ children }) => {
     const enriched = await Promise.all(
       items.map(async (item) => {
         try {
-          const res = await axios.get(`http://localhost:3001/api/books/${item.bookId}`);
+          const res = await axios.get(`https://online-book-store-backend-qtuz.onrender.com/api/books/${item.bookId}`);
           return { ...res.data, quantity: item.quantity };
         } catch {
           return null;
@@ -31,7 +31,7 @@ export const CartProvider = ({ children }) => {
       if (user?._id) {
         setLoadingCart(true);
         try {
-          const res = await axios.get(`http://localhost:3001/api/cart/${user._id}`);
+          const res = await axios.get(`https://online-book-store-backend-qtuz.onrender.com/api/cart/${user._id}`);
           const enriched = await enrichCartItems(res.data.items || []);
           setCart(enriched);
         } catch (err) {
@@ -59,7 +59,7 @@ export const CartProvider = ({ children }) => {
     }));
 
     axios
-      .post("http://localhost:3001/api/cart", {
+      .post("https://online-book-store-backend-qtuz.onrender.com/api/cart", {
         userId: user._id,
         items: minimalCart,
       })
@@ -105,7 +105,7 @@ export const CartProvider = ({ children }) => {
     setCart([]);
     if (user?._id) {
       axios
-        .post("http://localhost:3001/api/cart", {
+        .post("https://online-book-store-backend-qtuz.onrender.com/api/cart", {
           userId: user._id,
           items: [],
         })

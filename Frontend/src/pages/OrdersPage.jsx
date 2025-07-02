@@ -7,7 +7,7 @@ const OrdersPage = () => {
 
   useEffect(() => {
     if (user?._id) {
-      fetch(`http://localhost:3001/api/orders/${user._id}`)
+      fetch(`https://online-book-store-backend-qtuz.onrender.com/api/orders/${user._id}`)
         .then((res) => res.json())
         .then((data) => setOrders(data))
         .catch((err) => console.error("Failed to fetch orders", err));
