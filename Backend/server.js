@@ -11,6 +11,7 @@ var paymentRoutes = require('./routes/payment.js');
 var app = express();
 app.use(express.json());
 app.use(cors());
+const PORT = process.env.PORT || 3001;
 
 app.use('/api', authRoutes);
 app.use('/api',bookRoutes);
@@ -29,5 +30,5 @@ mongodb.connect(process.env.MONGO_URI,{
 })
 
 				 
-app.listen(3001,()=>console.log
+app.listen(PORT,()=>console.log
 		(`Backend is connected at http://localhost:${PORT}`));
