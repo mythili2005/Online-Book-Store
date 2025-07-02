@@ -7,43 +7,52 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const { user } = useAuth();
   const [cart, setCart] = useState([]);
+  const [loadingCart, setLoadingCart] = useState(false);
+  const [cartLoaded, setCartLoaded] = useState(false);
 
+  // Enrich minimal items from DB with book details
   const enrichCartItems = async (items) => {
-    console.log("📦 Enriching items:", items);
-    const enriched = await Promise.all(items.map(async (item) => {
-      console.log("🔍 Fetching book", item.bookId);
-      try {
-        const res = await axios.get(`http://localhost:3001/api/books/${item.bookId}`);
-        return { ...res.data, quantity: item.quantity };
-      } catch {
-        return null;
-      }
-    }));
-    return enriched.filter((i) => i);
+    const enriched = await Promise.all(
+      items.map(async (item) => {
+        try {
+          const res = await axios.get(`http://localhost:3001/api/books/${item.bookId}`);
+          return { ...res.data, quantity: item.quantity };
+        } catch {
+          return null;
+        }
+      })
+    );
+    return enriched.filter((item) => item);
   };
 
-  // Load on login/logout
+  // Load cart from DB when user logs in
   useEffect(() => {
     const loadCart = async () => {
       if (user?._id) {
+        setLoadingCart(true);
         try {
           const res = await axios.get(`http://localhost:3001/api/cart/${user._id}`);
           const enriched = await enrichCartItems(res.data.items || []);
-          console.log("✅ Loaded cart:", enriched);
           setCart(enriched);
         } catch (err) {
           console.error("❌ Cart load failed:", err);
+          setCart([]);
+        } finally {
+          setCartLoaded(true);
+          setLoadingCart(false);
         }
       } else {
         setCart([]);
+        setCartLoaded(false);
       }
     };
     loadCart();
   }, [user]);
 
-  // Save after each change
-useEffect(() => {
-  if (user?._id && cart.length > 0) {
+  // Save to DB after cart is loaded and updated
+  useEffect(() => {
+    if (!cartLoaded || loadingCart || !user?._id) return;
+
     const minimalCart = cart.map((item) => ({
       bookId: item._id,
       quantity: item.quantity,
@@ -54,55 +63,67 @@ useEffect(() => {
         userId: user._id,
         items: minimalCart,
       })
-      .then(() => console.log("✅ Cart updated in DB"))
-      .catch((err) => console.error("❌ Update failed:", err));
-  } else if (user?._id && cart.length === 0) {
-    // Handle clearing cart
-    axios
-      .post("http://localhost:3001/api/cart", {
-        userId: user._id,
-        items: [],
-      })
-      .then(() => console.log("🗑️ Cart cleared in DB"))
-      .catch((err) => console.error("❌ Clear failed:", err));
-  }
-}, [cart, user]);
+      .then(() =>
+        console.log(cart.length > 0 ? "✅ Cart updated in DB" : "🗑️ Cart cleared in DB")
+      )
+      .catch((err) => console.error("❌ Cart update failed:", err));
+  }, [cart, user, cartLoaded, loadingCart]);
 
-
-
-const addToCart = (book, quantity = 1) => {
-  console.log("🛒 addToCart called:", book, quantity);
-  setCart((prev) => {
-    const existing = prev.find((item) => item._id === book._id);
-    if (existing) {
-      return prev.map((item) =>
-        item._id === book._id
-          ? { ...item, quantity: item.quantity + quantity }
-          : item
-      );
-    }
-    return [...prev, { ...book, quantity }];
-  });
-};
-
-
-  const decreaseQuantity = (id) => {
-    setCart(prev => prev.map(item =>
-      item._id === id ? { ...item, quantity: item.quantity - 1 } : item
-    ).filter(item => item.quantity > 0));
+  // Add book to cart
+  const addToCart = (book, quantity = 1) => {
+    setCart((prev) => {
+      const existing = prev.find((item) => item._id === book._id);
+      if (existing) {
+        return prev.map((item) =>
+          item._id === book._id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
+      }
+      return [...prev, { ...book, quantity }];
+    });
   };
 
-  const removeFromCart = (id) => setCart(prev => prev.filter(item => item._id !== id));
+  // Decrease quantity of a book
+  const decreaseQuantity = (id) => {
+    setCart((prev) =>
+      prev
+        .map((item) =>
+          item._id === id ? { ...item, quantity: item.quantity - 1 } : item
+        )
+        .filter((item) => item.quantity > 0)
+    );
+  };
 
+  // Remove book from cart
+  const removeFromCart = (id) => {
+    setCart((prev) => prev.filter((item) => item._id !== id));
+  };
+
+  // Clear the cart
   const clearCart = () => {
     setCart([]);
     if (user?._id) {
-      axios.post("http://localhost:3001/api/cart", { userId: user._id, items: [] });
+      axios
+        .post("http://localhost:3001/api/cart", {
+          userId: user._id,
+          items: [],
+        })
+        .then(() => console.log("🗑️ Cart cleared manually in DB"))
+        .catch((err) => console.error("❌ Manual cart clear failed:", err));
     }
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, decreaseQuantity, removeFromCart, clearCart }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        addToCart,
+        decreaseQuantity,
+        removeFromCart,
+        clearCart,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
