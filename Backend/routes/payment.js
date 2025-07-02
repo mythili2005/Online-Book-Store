@@ -2,6 +2,8 @@ const express = require('express');
 const crypto = require('crypto');
 const razorpay = require('../utils/razorpay');
 const Order = require('../models/Order');
+const Book = require('../models/Book'); // ✅ Add this import at the top
+
 
 const router = express.Router();
 
@@ -55,8 +57,13 @@ router.post('/verify', async (req, res) => {
     });
 
     await newOrder.save();
-
+    for (const item of cartItems) {
+  await Book.findByIdAndUpdate(item._id, {
+    $inc: { stock: -item.quantity }
+  });
+}
     res.json({ message: "Payment verified & order saved!" });
+    
   } catch (err) {
     console.error("Verification error:", err.message);
     res.status(500).json({ message: "Verification failed", error: err.message });
