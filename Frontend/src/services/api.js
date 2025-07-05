@@ -23,15 +23,17 @@ export const fetchBookById = async (id) => {
   }
 };
 
-export const fetchAllBooks = async (filters) => {
+export const fetchAllBooks = async (filters, page = 1, limit = 20) => {
   try {
-    const res = await api.get("/books", { params: filters });
-    return res.data;
+    const params = { ...filters, page, limit };
+    const res = await api.get("/books", { params });
+    return res.data; // { books, total }
   } catch (err) {
     console.error("Error fetching books:", err);
-    return [];
+    return { books: [], total: 0 }; // Return same structure as your useEffect expects
   }
 };
+
 
 
 export default api;
