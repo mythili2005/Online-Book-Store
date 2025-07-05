@@ -18,25 +18,38 @@ router.post('/books', verifyAdmin, async(req,res)=>{
 })
 
 router.get('/books', async (req, res) => {
-  const { category, author, minPrice, maxPrice, search } = req.query;
+  const {
+    category,
+    author,
+    minPrice = 0,
+    maxPrice = 1000,
+    search,
+    page = 1,
+    limit = 20,
+  } = req.query;
+
   let filter = {};
 
   if (category) filter.category = category;
   if (author) filter.author = new RegExp(author, 'i');
   if (search) filter.title = new RegExp(search, 'i');
-  if (minPrice || maxPrice) {
-    filter.price = {};
-    if (minPrice) filter.price.$gte = Number(minPrice);
-    if (maxPrice) filter.price.$lte = Number(maxPrice);
-  }
+  filter.price = { $gte: Number(minPrice), $lte: Number(maxPrice) };
 
   try {
-    const books = await Book.find(filter);
-    res.json(books);
+    const skip = (page - 1) * limit;
+
+    const books = await Book.find(filter)
+      .skip(skip)
+      .limit(Number(limit));
+
+    const total = await Book.countDocuments(filter);
+
+    res.json({ books, total });
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
 
 // ✅ Get single book by ID
 router.get('/books/:id', async (req, res) => {
