@@ -63,7 +63,7 @@ router.get('/google/callback', async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.redirect(`http://localhost:5173/google-auth?token=${token}`);
+    res.redirect(`https://online-book-store-frontend-azure.vercel.app/google-auth?token=${token}`);
   } catch (err) {
     console.error("OAuth call error",err);
     res.status(500).send("Google Auth Failed");
